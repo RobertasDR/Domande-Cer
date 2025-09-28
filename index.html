@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Albero decisionale Cerved – Discovery chiamata</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #12161b;
+      --muted: #9aa4af;
+      --text: #e9eef5;
+      --accent: #5dd0ff;
+      --accent-2: #9bffb0;
+      --danger: #ff7a7a;
+      --card: #0f1318;
+      --chip: #1a2027;
+      --border: #222934;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), #090b0f 60%);
+      color: var(--text);
+      font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 24px auto 56px;
+      padding: 0 16px;
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 16px;
+    }
+    .title {
+      display: grid; gap: 4px;
+    }
+    .title h1 { margin: 0; font-size: 22px; letter-spacing: 0.3px; }
+    .title p { margin: 0; color: var(--muted); font-size: 13px; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    button.btn {
+      background: var(--chip);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer; font-weight: 600;
+      transition: .18s ease;
+    }
+    button.btn:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: 0 8px 20px rgba(93,208,255,.12); }
+    button.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 16px;
+    }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), #0f1419);
+      border: 1px solid var(--border);
+      border-radius: 16px; box-shadow: var(--shadow);
+    }
+
+    .question {
+      padding: 22px 22px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .question small { color: var(--muted); }
+
+    .qtext { font-size: 18px; margin: 4px 0 0; }
+
+    .options { padding: 14px 18px 20px; display: grid; gap: 10px; }
+    .opt {
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 14px;
+      padding: 14px 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; transition: .18s ease;
+    }
+    .opt:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(93,208,255,.1); transform: translateY(-1px); }
+    .opt .hint { color: var(--muted); font-size: 12px; }
+
+    .sidebar { padding: 16px; display: grid; gap: 16px; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+    .card h3 { margin: 0 0 8px; font-size: 14px; color: #dfe8f3; letter-spacing: .2px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: var(--chip);
+      border: 1px solid var(--border);
+      padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--text);
+    }
+
+    .breadcrumbs { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted); }
+    .crumb { display: inline-flex; gap: 6px; align-items: center; }
+    .crumb a { color: var(--accent); text-decoration: none; font-size: 13px; }
+
+    .footnote { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .solutions { display: grid; gap: 8px; }
+    .solution { border: 1px dashed var(--border); padding: 10px 12px; border-radius: 12px; }
+    .solution b { color: var(--accent-2); }
+
+    .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Albero decisionale – Discovery chiamata (Cerved)</h1>
+        <p>Clicca le risposte: il flusso prosegue alla domanda successiva e propone i servizi Cerved coerenti.</p>
+      </div>
+      <div class="controls">
+        <button class="btn" id="backBtn" disabled>◀︎ Indietro</button>
+        <button class="btn" id="restartBtn">⟲ Ricomincia</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel" id="qaPanel">
+        <div class="breadcrumbs" id="breadcrumbs"></div>
+        <div class="question">
+          <small>Domanda corrente</small>
+          <div class="qtext" id="qtext"></div>
+        </div>
+        <div class="options" id="options"></div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Soluzioni suggerite (dinamiche)</h3>
+          <div class="solutions" id="solutions"></div>
+          <div class="footnote">Le proposte si aggiornano in base al percorso scelto.</div>
+        </div>
+        <div class="card">
+          <h3>Percorso</h3>
+          <div class="chips" id="pathChips"></div>
+        </div>
+        <div class="footer">© Flow builder per chiamate discovery – Cerved</div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // === MODELLO DELL'ALBERO ===
+    // Ogni nodo ha: id, text (domanda), options: [{label, next, addSolutions:[], addTags:[] }]
+    // I nodi terminali hanno addSolutions più ricche per chiudere la raccomandazione.
+
+    const NODES = {
+      start: {
+        id: 'start',
+        text: 'Qual è la tipologia prevalente dei vostri clienti?',
+        options: [
+          { label: 'Grandi imprese', next: 'geo', addSolutions: ['Report Cerved', 'Pro Web', 'Rating & Affidabilità'], addTags: ['Tipologia: Grandi'] },
+          { label: 'PMI / Micro', next: 'geo', addSolutions: ['Credit Check (CCS)', 'Report Cerved'], addTags: ['Tipologia: PMI/Micro'] },
+          { label: 'Misto', next: 'geo', addSolutions: ['Report Cerved'], addTags: ['Tipologia: Misto'] },
+        ]
+      },
+      geo: {
+        id: 'geo',
+        text: 'La vostra clientela è prevalentemente…',
+        options: [
+          { label: 'Italia', next: 'acq', addSolutions: ['Powerbiz', 'Marketing Intelligence'], addTags: ['Mercato: Italia'] },
+          { label: 'Estero (≥ 90%)', next: 'geo_estero', addSolutions: [], addTags: ['Mercato: Estero ≥90%'] },
+          { label: 'Misto Italia/Estero', next: 'acq', addSolutions: ['Atoka con add-on estero'], addTags: ['Mercato: Misto'] },
+        ]
+      },
+      geo_estero: {
+        id: 'geo_estero',
+        text: 'Su quali aree estere operate di più?',
+        options: [
+          { label: 'Europa', next: 'acq', addSolutions: ['Atoka – add-on estero (EU)'], addTags: ['Estero: Europa'] },
+          { label: 'Extra UE', next: 'acq', addSolutions: ['Visure/Report internazionali'], addTags: ['Estero: Extra UE'] },
+        ]
+      },
+      acq: {
+        id: 'acq',
+        text: 'Come individuate nuovi clienti o mercati?',
+        options: [
+          { label: 'Passaparola / rete commerciale', next: 'crm', addSolutions: ['Atoka (prospezione)', 'Marketing Intelligence'], addTags: ['Acquisizione: Passaparola'] },
+          { label: 'Strumenti e dati strutturati', next: 'crm', addSolutions: ['CRM enrichment (API Cerved)'], addTags: ['Acquisizione: Dati strutturati'] },
+        ]
+      },
+      crm: {
+        id: 'crm',
+        text: 'Avete un CRM o strumenti digitali per gestire i contatti?',
+        options: [
+          { label: 'Sì, ma non integrato con dati esterni', next: 'valutazione', addSolutions: ['API Cerved', 'Atoka integrato'], addTags: ['CRM: Sì (non integrato)'] },
+          { label: 'Sì, già integrato', next: 'valutazione', addSolutions: [], addTags: ['CRM: Sì (integrato)'] },
+          { label: 'No', next: 'valutazione', addSolutions: ['Atoka (prima implementazione)'], addTags: ['CRM: No'] },
+        ]
+      },
+      valutazione: {
+        id: 'valutazione',
+        text: 'Quando valutate clienti/fornitori, su cosa vi basate?',
+        options: [
+          { label: 'Esperienza / impressioni', next: 'credito', addSolutions: ['Report Cerved', 'Pro Web'], addTags: ['Valutazione: Esperienza'] },
+          { label: 'Controlli periodici e documentali', next: 'credito', addSolutions: ['Monitoring & Alert', 'DAS (documenti)'], addTags: ['Valutazione: Controlli'] },
+        ]
+      },
+      credito: {
+        id: 'credito',
+        text: 'Come gestite tempi di incasso e rischio credito?',
+        options: [
+          { label: 'Non monitoriamo in modo sistematico', next: 'competitor', addSolutions: ['Cerved Credit Score (CCS)', 'Credit Risk Management'], addTags: ['Credito: Non monitorato'] },
+          { label: 'Policy e score interni', next: 'competitor', addSolutions: ['Monitoring & Alert'], addTags: ['Credito: Policy interne'] },
+        ]
+      },
+      competitor: {
+        id: 'competitor',
+        text: 'Analisi dei competitor: come vi confrontate con il mercato?',
+        options: [
+          { label: 'Non abbiamo un benchmark strutturato', next: 'bandi', addSolutions: ['Market/Competitive Intelligence', 'Benchmark settoriali'], addTags: ['Competitor: Assente'] },
+          { label: 'Benchmark su alcuni indicatori', next: 'bandi', addSolutions: ['Analisi comparativa avanzata', 'Atoka per mappatura competitor'], addTags: ['Competitor: Parziale'] },
+        ]
+      },
+      bandi: {
+        id: 'bandi',
+        text: 'Bandi e gare pubbliche: sono rilevanti per la vostra crescita?',
+        options: [
+          { label: 'Sì, frequenti', next: 'attriti', addSolutions: ['Cerca il Bando'], addTags: ['Bandi: Sì'] },
+          { label: 'Occasionali / No', next: 'attriti', addSolutions: [], addTags: ['Bandi: No/Occ.'] },
+        ]
+      },
+      attriti: {
+        id: 'attriti',
+        text: 'Guardando all’ultimo anno, dove incontrate più attrito?',
+        options: [
+          { label: 'Acquisizione clienti', next: 'final_acq', addSolutions: ['Atoka', 'Marketing Intelligence'], addTags: ['Attrito: Acquisizione'] },
+          { label: 'Qualifica clienti/fornitori', next: 'final_qual', addSolutions: ['Reportistica', 'Pro Web'], addTags: ['Attrito: Qualifica'] },
+          { label: 'Incassi / rischio credito', next: 'final_credit', addSolutions: ['CCS', 'Monitoring & Alert'], addTags: ['Attrito: Credito'] },
+          { label: 'Documenti / burocrazia', next: 'final_doc', addSolutions: ['DAS (Document Acquisition System)'], addTags: ['Attrito: Documenti'] },
+        ]
+      },
+      final_acq: {
+        id: 'final_acq',
+        text: 'Raccomandazione: potenziamo lead gen e segmentazione.',
+        options: [
+          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Atoka (prospezione + add-on estero se serve)', 'Marketing Intelligence', 'CRM enrichment (API Cerved)'], addTags: ['Output: Acquisizione'] }
+        ]
+      },
+      final_qual: {
+        id: 'final_qual',
+        text: 'Raccomandazione: qualificazione strutturata di clienti e fornitori.',
+        options: [
+          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Report Cerved', 'Pro Web', 'Monitoring & Alert'], addTags: ['Output: Qualifica'] }
+        ]
+      },
+      final_credit: {
+        id: 'final_credit',
+        text: 'Raccomandazione: controllo rischio e incassi.',
+        options: [
+          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Cerved Credit Score (CCS)', 'Credit Risk Management', 'Monitoring & Alert'], addTags: ['Output: Credito'] }
+        ]
+      },
+      final_doc: {
+        id: 'final_doc',
+        text: 'Raccomandazione: snellire l’acquisizione documentale.',
+        options: [
+          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['DAS (Document Acquisition System)'], addTags: ['Output: Documenti'] }
+        ]
+      }
+    };
+
+    // === STATO ===
+    const state = {
+      stack: ['start'], // history of node ids
+      pathLabels: [],   // chosen labels
+      solutions: new Map() // solution -> weight
+    };
+
+    function currentNode() { return NODES[state.stack[state.stack.length - 1]]; }
+
+    // === RENDER ===
+    const qtextEl = document.getElementById('qtext');
+    const optionsEl = document.getElementById('options');
+    const backBtn = document.getElementById('backBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const solutionsEl = document.getElementById('solutions');
+    const pathChipsEl = document.getElementById('pathChips');
+    const breadcrumbsEl = document.getElementById('breadcrumbs');
+
+    function render() {
+      const node = currentNode();
+      // Header & question
+      qtextEl.textContent = node.text;
+      optionsEl.innerHTML = '';
+
+      node.options.forEach((opt, idx) => {
+        const div = document.createElement('div');
+        div.className = 'opt';
+        const left = document.createElement('div');
+        left.innerHTML = `<div>${opt.label}</div>`;
+        const right = document.createElement('div');
+        right.className = 'hint';
+        right.textContent = opt.next ? 'continua →' : 'conclusione';
+        div.append(left, right);
+        div.addEventListener('click', () => chooseOption(opt));
+        optionsEl.appendChild(div);
+      });
+
+      // Controls
+      backBtn.disabled = state.stack.length <= 1;
+
+      // Breadcrumbs
+      breadcrumbsEl.innerHTML = '';
+      state.stack.forEach((nodeId, i) => {
+        const span = document.createElement('span');
+        span.className = 'crumb';
+        if (i < state.stack.length - 1) {
+          const link = document.createElement('a');
+          link.textContent = NODES[nodeId].text.length > 36 ? NODES[nodeId].text.slice(0,36) + '…' : NODES[nodeId].text;
+          link.href = '#';
+          link.addEventListener('click', (e) => { e.preventDefault(); jumpTo(i); });
+          span.appendChild(link);
+          const sep = document.createElement('span'); sep.textContent = '›'; sep.style.opacity = .6; span.appendChild(sep);
+        } else {
+          const cur = document.createElement('span'); cur.textContent = NODES[nodeId].text;
+          span.appendChild(cur);
+        }
+        breadcrumbsEl.appendChild(span);
+      });
+
+      // Path chips
+      pathChipsEl.innerHTML = '';
+      state.pathLabels.forEach((lbl) => {
+        const c = document.createElement('span');
+        c.className = 'chip'; c.textContent = lbl;
+        pathChipsEl.appendChild(c);
+      });
+
+      // Solutions – sorted by weight desc
+      const solutions = Array.from(state.solutions.entries()).sort((a,b) => b[1]-a[1]);
+      solutionsEl.innerHTML = '';
+      if (!solutions.length) {
+        const empty = document.createElement('div');
+        empty.className = 'footnote';
+        empty.textContent = 'Nessuna proposta ancora: inizia a cliccare le risposte.';
+        solutionsEl.appendChild(empty);
+      } else {
+        solutions.forEach(([name, weight]) => {
+          const row = document.createElement('div');
+          row.className = 'solution';
+          row.innerHTML = `<b>${name}</b><div class="footnote">pertinenza ×${weight}</div>`;
+          solutionsEl.appendChild(row);
+        });
+      }
+    }
+
+    function chooseOption(opt) {
+      // record selections
+      if (opt.addTags) opt.addTags.forEach(t => state.pathLabels.push(t));
+      if (opt.addSolutions) opt.addSolutions.forEach(s => state.solutions.set(s, (state.solutions.get(s) || 0) + 1));
+
+      if (opt.next) {
+        state.stack.push(opt.next);
+        render();
+      } else {
+        // Terminal node: just refresh solutions (already updated) and lock current node
+        render();
+      }
+    }
+
+    function jumpTo(index) {
+      // trim to index
+      state.stack = state.stack.slice(0, index + 1);
+      // also trim path labels heuristically (not perfect reverse map, but acceptable UX)
+      // Simpler approach: recompute from scratch following the stack choices.
+      recomputeState();
+      render();
+    }
+
+    function recomputeState() {
+      // Recompute selections by replaying from start using saved stack transitions
+      const oldStack = [...state.stack];
+      const labels = [];
+      const sol = new Map();
+
+      // We cannot infer which option was picked at each step from node ids alone.
+      // So we reset to only the current node without history (best-effort UX).
+      // In practice, jumpTo is used to go back one or two steps, so user can re-click.
+      state.stack = [oldStack[oldStack.length-1]];
+      state.pathLabels = labels;
+      state.solutions = sol;
+    }
+
+    backBtn.addEventListener('click', () => {
+      if (state.stack.length > 1) {
+        state.stack.pop();
+        recomputeState();
+        render();
+      }
+    });
+
+    restartBtn.addEventListener('click', () => {
+      state.stack = ['start'];
+      state.pathLabels = [];
+      state.solutions = new Map();
+      render();
+    });
+
+    // Init
+    render();
+  </script>
+</body>
+</html>
