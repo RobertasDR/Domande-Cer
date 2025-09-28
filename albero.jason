@@ -1,0 +1,290 @@
+{
+  "start": {
+    "id": "start",
+    "text": "Qual è la tipologia prevalente dei vostri clienti?",
+    "options": [
+      {
+        "label": "Grandi imprese",
+        "next": "geo",
+        "addSolutions": ["Report Cerved", "Pro Web", "Rating & Affidabilità"],
+        "addTags": ["Tipologia: Grandi"]
+      },
+      {
+        "label": "PMI / Micro",
+        "next": "geo",
+        "addSolutions": ["Credit Check (CCS)", "Report Cerved"],
+        "addTags": ["Tipologia: PMI/Micro"]
+      },
+      {
+        "label": "Misto",
+        "next": "geo",
+        "addSolutions": ["Report Cerved"],
+        "addTags": ["Tipologia: Misto"]
+      },
+      {
+        "label": "Altro",
+        "next": "geo",
+        "promptNote": true,
+        "addTags": ["Tipologia: Altro"]
+      }
+    ]
+  },
+  "geo": {
+    "id": "geo",
+    "text": "La vostra clientela è prevalentemente…",
+    "options": [
+      {
+        "label": "Italia",
+        "next": "acq",
+        "addSolutions": ["Powerbiz", "Marketing Intelligence"],
+        "addTags": ["Mercato: Italia"]
+      },
+      {
+        "label": "Estero (≥ 90%)",
+        "next": "geo_estero",
+        "addTags": ["Mercato: Estero ≥90%"]
+      },
+      {
+        "label": "Misto Italia/Estero",
+        "next": "acq",
+        "addSolutions": ["Atoka con add-on estero"],
+        "addTags": ["Mercato: Misto"]
+      },
+      {
+        "label": "Altro",
+        "next": "acq",
+        "promptNote": true,
+        "addTags": ["Mercato: Altro"]
+      }
+    ]
+  },
+  "geo_estero": {
+    "id": "geo_estero",
+    "text": "Su quali aree estere operate di più?",
+    "options": [
+      {
+        "label": "Europa",
+        "next": "acq",
+        "addSolutions": ["Atoka – add-on estero (EU)"],
+        "addTags": ["Estero: Europa"]
+      },
+      {
+        "label": "Extra UE",
+        "next": "acq",
+        "addSolutions": ["Visure/Report internazionali"],
+        "addTags": ["Estero: Extra UE"]
+      },
+      {
+        "label": "Altro",
+        "next": "acq",
+        "promptNote": true,
+        "addTags": ["Estero: Altro"]
+      }
+    ]
+  },
+  "acq": {
+    "id": "acq",
+    "text": "Come individuate nuovi clienti o mercati?",
+    "options": [
+      {
+        "label": "Passaparola / rete commerciale",
+        "next": "crm",
+        "addSolutions": ["Atoka (prospezione)", "Marketing Intelligence"],
+        "addTags": ["Acquisizione: Passaparola"]
+      },
+      {
+        "label": "Strumenti e dati strutturati",
+        "next": "crm",
+        "addSolutions": ["CRM enrichment (API Cerved)"],
+        "addTags": ["Acquisizione: Dati strutturati"]
+      },
+      {
+        "label": "Canali digitali / Ads / Fiere",
+        "next": "crm",
+        "addSolutions": ["Atoka (segmentazione)"],
+        "addTags": ["Acquisizione: Canali marketing"]
+      },
+      {
+        "label": "Altro",
+        "next": "crm",
+        "promptNote": true,
+        "addTags": ["Acquisizione: Altro"]
+      }
+    ]
+  },
+  "crm": {
+    "id": "crm",
+    "text": "Avete un CRM o strumenti digitali per gestire i contatti?",
+    "options": [
+      {
+        "label": "Sì, ma non integrato con dati esterni",
+        "next": "valutazione",
+        "addSolutions": ["API Cerved", "Atoka integrato"],
+        "addTags": ["CRM: Sì (non integrato)"]
+      },
+      {
+        "label": "Sì, già integrato",
+        "next": "valutazione",
+        "addTags": ["CRM: Sì (integrato)"]
+      },
+      {
+        "label": "No (Excel / manuale)",
+        "next": "valutazione",
+        "addSolutions": ["Atoka (prima implementazione)"],
+        "addTags": ["CRM: No/Excel"]
+      },
+      {
+        "label": "Altro",
+        "next": "valutazione",
+        "promptNote": true,
+        "addTags": ["CRM: Altro"]
+      }
+    ]
+  },
+  "valutazione": {
+    "id": "valutazione",
+    "text": "Quando valutate clienti/fornitori, su cosa vi basate?",
+    "options": [
+      {
+        "label": "Esperienza / impressioni",
+        "next": "credito",
+        "addSolutions": ["Report Cerved", "Pro Web"],
+        "addTags": ["Valutazione: Esperienza"]
+      },
+      {
+        "label": "Controlli periodici e documentali",
+        "next": "credito",
+        "addSolutions": ["Monitoring & Alert", "DAS (documenti)"],
+        "addTags": ["Valutazione: Controlli"]
+      },
+      {
+        "label": "Score di terzi / assicurazione crediti",
+        "next": "credito",
+        "addSolutions": ["Integrazione score Cerved"],
+        "addTags": ["Valutazione: Score terzi"]
+      },
+      {
+        "label": "Altro",
+        "next": "credito",
+        "promptNote": true,
+        "addTags": ["Valutazione: Altro"]
+      }
+    ]
+  },
+  "credito": {
+    "id": "credito",
+    "text": "Come gestite tempi di incasso e rischio credito?",
+    "options": [
+      {
+        "label": "Non monitoriamo in modo sistematico",
+        "next": "competitor",
+        "addSolutions": ["Cerved Credit Score (CCS)", "Credit Risk Management"],
+        "addTags": ["Credito: Non monitorato"]
+      },
+      {
+        "label": "Policy e score interni",
+        "next": "competitor",
+        "addSolutions": ["Monitoring & Alert"],
+        "addTags": ["Credito: Policy interne"]
+      },
+      {
+        "label": "Assicurazione crediti / factoring",
+        "next": "competitor",
+        "addSolutions": ["Policy integrate con CCS"],
+        "addTags": ["Credito: Assicurazione/Factoring"]
+      },
+      {
+        "label": "Altro",
+        "next": "competitor",
+        "promptNote": true,
+        "addTags": ["Credito: Altro"]
+      }
+    ]
+  },
+  "competitor": {
+    "id": "competitor",
+    "text": "Analisi dei competitor: come vi confrontate con il mercato?",
+    "options": [
+      {
+        "label": "Non abbiamo un benchmark strutturato",
+        "next": "bandi",
+        "addSolutions": ["Market/Competitive Intelligence", "Benchmark settoriali"],
+        "addTags": ["Competitor: Assente"]
+      },
+      {
+        "label": "Benchmark su alcuni indicatori",
+        "next": "bandi",
+        "addSolutions": ["Analisi comparativa avanzata", "Atoka per mappatura competitor"],
+        "addTags": ["Competitor: Parziale"]
+      },
+      {
+        "label": "Analisi avanzata e continua",
+        "next": "bandi",
+        "addSolutions": ["Dashboard competitive"],
+        "addTags": ["Competitor: Avanzata"]
+      },
+      {
+        "label": "Altro",
+        "next": "bandi",
+        "promptNote": true,
+        "addTags": ["Competitor: Altro"]
+      }
+    ]
+  },
+  "bandi": {
+    "id": "bandi",
+    "text": "Bandi e gare pubbliche: sono rilevanti per la vostra crescita?",
+    "options": [
+      { "label": "Sì, frequenti", "next": "attriti", "addSolutions": ["Cerca il Bando"], "addTags": ["Bandi: Sì"] },
+      { "label": "Occasionali", "next": "attriti", "addTags": ["Bandi: Occasionali"] },
+      { "label": "No", "next": "attriti", "addTags": ["Bandi: No"] },
+      { "label": "Altro", "next": "attriti", "promptNote": true, "addTags": ["Bandi: Altro"] }
+    ]
+  },
+  "attriti": {
+    "id": "attriti",
+    "text": "Guardando all’ultimo anno, dove incontrate più attrito?",
+    "options": [
+      { "label": "Acquisizione clienti", "next": "final_acq", "addSolutions": ["Atoka", "Marketing Intelligence"], "addTags": ["Attrito: Acquisizione"] },
+      { "label": "Qualifica clienti/fornitori", "next": "final_qual", "addSolutions": ["Reportistica", "Pro Web"], "addTags": ["Attrito: Qualifica"] },
+      { "label": "Incassi / rischio credito", "next": "final_credit", "addSolutions": ["CCS", "Monitoring & Alert"], "addTags": ["Attrito: Credito"] },
+      { "label": "Documenti / burocrazia", "next": "final_doc", "addSolutions": ["DAS (Document Acquisition System)"], "addTags": ["Attrito: Documenti"] },
+      { "label": "Altro", "next": "final_altro", "promptNote": true, "addTags": ["Attrito: Altro"] }
+    ]
+  },
+  "final_acq": {
+    "id": "final_acq",
+    "text": "Raccomandazione: potenziamo lead gen e segmentazione.",
+    "options": [
+      { "label": "📝 Genera report e chiudi", "next": null, "addSolutions": ["Atoka (prospezione + add-on estero se serve)", "Marketing Intelligence", "CRM enrichment (API Cerved)"], "addTags": ["Output: Acquisizione"] }
+    ]
+  },
+  "final_qual": {
+    "id": "final_qual",
+    "text": "Raccomandazione: qualificazione strutturata di clienti e fornitori.",
+    "options": [
+      { "label": "📝 Genera report e chiudi", "next": null, "addSolutions": ["Report Cerved", "Pro Web", "Monitoring & Alert"], "addTags": ["Output: Qualifica"] }
+    ]
+  },
+  "final_credit": {
+    "id": "final_credit",
+    "text": "Raccomandazione: controllo rischio e incassi.",
+    "options": [
+      { "label": "📝 Genera report e chiudi", "next": null, "addSolutions": ["Cerved Credit Score (CCS)", "Credit Risk Management", "Monitoring & Alert"], "addTags": ["Output: Credito"] }
+    ]
+  },
+  "final_doc": {
+    "id": "final_doc",
+    "text": "Raccomandazione: snellire l’acquisizione documentale.",
+    "options": [
+      { "label": "📝 Genera report e chiudi", "next": null, "addSolutions": ["DAS (Document Acquisition System)"], "addTags": ["Output: Documenti"] }
+    ]
+  },
+  "final_altro": {
+    "id": "final_altro",
+    "text": "Raccomandazione: caso atipico → valutazione consulenziale ad hoc.",
+    "options": [
+      { "label": "📝 Genera report e chiudi", "next": null, "addSolutions": ["Sessione consulenziale Cerved", "Analisi personalizzata mercato/credito"], "addTags": ["Output: Consulenza ad hoc"] }
+    ]
+  }
+}
