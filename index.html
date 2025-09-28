@@ -53,13 +53,16 @@
       <div class="controls">
         <button class="btn" id="backBtn" disabled>◀︎ Indietro</button>
         <button class="btn" id="restartBtn">⟲ Ricomincia</button>
+        <button class="btn" id="endNowBtn">✓ Termina ora</button>
         <button class="btn" id="reportBtn" disabled>📝 Genera report</button>
+        <button class="btn" id="mapBtn">☰ Mappa domande</button>
         <div class="schema-tools">
           <button class="btn" id="reloadSchema">↻ Ricarica albero</button>
           <label class="file" for="uploadSchema">⤴︎ Carica JSON</label>
           <input type="file" id="uploadSchema" accept="application/json" />
           <button class="btn" id="downloadSchema">⬇︎ Scarica schema</button>
         </div>
+      </div>
       </div>
     </header>
 
@@ -101,6 +104,7 @@
       <div class="actions">
         <button class="btn" id="copyReport">Copia</button>
         <button class="btn" id="downloadReport">Scarica .txt</button>
+        <button class="btn" id="downloadPDF">Esporta PDF</button>
         <button class="btn" id="closeReport">Chiudi</button>
       </div>
     </div>
@@ -108,9 +112,7 @@
 
   <script>
     // === CARICAMENTO SCHEMA DINAMICO ===
-    // L'albero viene letto da 'albero.json' (stessa cartella). È possibile anche caricare un JSON locale o scaricare lo schema corrente.
-
-    let NODES = {};               // popolerà lo schema
+    let NODES = {};               // popola lo schema
     let RAW_SCHEMA_TEXT = '';     // testo originale per download
 
     const statusEl = document.getElementById('status');
@@ -124,13 +126,12 @@
         NODES = data;
         RAW_SCHEMA_TEXT = JSON.stringify(data, null, 2);
         setStatus('caricato da ' + url);
-        initOrRender();
+        initOrRender(true);
       } catch (e) {
         setStatus('errore: non trovo "' + url + '". Carica un JSON o usa lo schema di esempio.');
-        // fallback: mini schema per permettere uso immediato
         NODES = demoSchema();
         RAW_SCHEMA_TEXT = JSON.stringify(NODES, null, 2);
-        initOrRender();
+        initOrRender(true);
       }
     }
 
@@ -158,12 +159,45 @@
     const state = { stack: ['start'], answers: [], pathLabels: [], solutions: new Map() };
     function currentNode() { return NODES[state.stack[state.stack.length - 1]]; }
 
+    // === INFO PRODOTTI (descrizione + perché) ===
+    $1
+      'Atoka': { desc: 'Piattaforma per prospecting, segmentazione e lead generation su imprese italiane/estere con filtri avanzati.', why: 'Utile per ampliare pipeline e qualificare target in modo data-driven.' },
+      'Atoka (prospezione + add-on estero se serve)': { desc: 'Prospezione su Italia con estensione dati esteri quando necessario.', why: 'Copertura mista Italia/estero con continuità di filtri e arricchimento.' },
+      'Atoka con add-on estero': { desc: 'Estensione per reperire dati e contatti su aziende estere (focus Europa).', why: 'Necessaria quando la clientela è prevalentemente estera.' },
+      'Atoka – add-on estero (EU)': { desc: 'Modulo per prospecting su aziende europee con criteri simili all’Italia.', why: 'Allinea i criteri di segmentazione al contesto UE.' },
+      'Atoka estero': { desc: 'Prospezione e segmentazione su mercati esteri extra-UE.', why: 'Quando i target principali sono fuori dall’UE.' },
+      'Marketing Intelligence': { desc: 'Analisi di mercato, cluster e potenziale; supporto a piani commerciali e territori/settori.', why: 'Per scegliere dove investire e con quale priorità.' },
+      'Powerbiz': { desc: 'Cruscotti commerciali su imprese italiane per mappare clienti/prospect e performance territoriali.', why: 'Per presidiare il mercato domestico con KPI fruibili.' },
+      'Pro Web': { desc: 'Portale per visure, bilanci, assetti societari, eventi negativi/positivi e indicatori chiave.', why: 'Per qualificare partner e ridurre rischi informativi.' },
+      'Report Cerved': { desc: 'Report completi sull’affidabilità di controparti con indicatori economico-finanziari e sintetici.', why: 'Per decisioni strutturate su clienti/fornitori.' },
+      'Rating & Affidabilità': { desc: 'Indicatori sintetici di solidità e rischio, utili per policy e plafond.', why: 'Per standardizzare valutazioni e guidare limiti di esposizione.' },
+      'Cerved Credit Score (CCS)': { desc: 'Score di rischio credito per screening e monitoraggio del portafoglio.', why: 'Per prevenire insoluti e impostare soglie decisionali.' },
+      'Credit Risk Management': { desc: 'Metodologie e workflow per governare il rischio credito (policy, processi, KPI).', why: 'Per strutturare governance, ridurre DSO e perdite.' },
+      'Monitoring & Alert': { desc: 'Sorveglianza continua su clienti/fornitori con notifiche su cambi eventi/indicatori.', why: 'Per intervenire tempestivamente su segnali di deterioramento.' },
+      'DAS (Document Acquisition System)': { desc: 'Raccolta automatizzata di documenti ufficiali (visure, bilanci, protesti).', why: 'Per velocizzare compliance, gare e onboarding.' },
+      'CRM enrichment (API Cerved)': { desc: 'API per arricchire CRM/ERP con anagrafiche, codifiche e indicatori.', why: 'Per integrare i dati nei processi operativi.' },
+      'Integrazione score Cerved': { desc: 'Utilizzo degli score Cerved dentro processi e tool interni/assicurativi.', why: 'Per uniformare le decisioni al rischio reale.' },
+      'Visure/Report internazionali': { desc: 'Accesso a informazioni societarie e creditizie extra-UE.', why: 'Per qualificare partner non UE con fonti certificate.' },
+      'Sessione consulenziale Cerved': { desc: 'Assessment personalizzato quando il caso è atipico o complesso.', why: 'Per definire un piano su misura prima della demo.' },
+      'Analisi personalizzata mercato/credito': { desc: 'Studio mirato su settore/portafoglio con raccomandazioni operative.', why: 'Per massimizzare ROI delle iniziative proposte.' },
+      'Policy integrate con CCS': { desc: 'Allineamento score Cerved con assicurazioni/factoring.', why: 'Per coerenza tra coperture, limiti e allarmi.' },
+      'Dashboard competitive': { desc: 'Monitor continuo dei competitor e posizionamento.', why: 'Per decisioni basate su dati nel go-to-market.' },
+      'Atoka (segmentazione)': { desc: 'Segmentazione target e scoring commerciale multivariato.', why: 'Per migliorare resa di campagne e field sales.' },
+      'Reportistica': { desc: 'Produzione periodica di report su portafoglio e rischi.', why: 'Per governance e condivisione interna.' },
+      'Market/Competitive Intelligence': { desc: 'Dataset e analisi per conoscere il mercato e i concorrenti.', why: 'Per definire strategie di posizionamento e quote.' },
+      'Benchmark settoriali': { desc: 'Indicatori comparati del settore e dei peer.', why: 'Per confrontare performance e margini rispetto al mercato.' },
+      'Analisi comparativa avanzata': { desc: 'Confronto multi-criterio su peer selezionati.', why: 'Per individuare gap e opportunità specifiche.' },
+      'Cerca il Bando': { desc: 'Ricerca e alert su bandi e gare rilevanti per il business.', why: 'Per intercettare opportunità di vendita e finanziamento.' }
+    $2
+
     // === RENDER ===
     const qtextEl = document.getElementById('qtext');
     const optionsEl = document.getElementById('options');
     const backBtn = document.getElementById('backBtn');
     const restartBtn = document.getElementById('restartBtn');
+    const endNowBtn = document.getElementById('endNowBtn');
     const reportBtn = document.getElementById('reportBtn');
+    const mapBtn = document.getElementById('mapBtn');
     const solutionsEl = document.getElementById('solutions');
     const pathChipsEl = document.getElementById('pathChips');
     const breadcrumbsEl = document.getElementById('breadcrumbs');
@@ -172,7 +206,13 @@
     const reportText = document.getElementById('reportText');
     const copyReport = document.getElementById('copyReport');
     const downloadReport = document.getElementById('downloadReport');
+    const downloadPDF = document.getElementById('downloadPDF');
     const closeReport = document.getElementById('closeReport');
+
+    const mapModal = document.getElementById('mapModal');
+    const mapList = document.getElementById('mapList');
+    const mapSearch = document.getElementById('mapSearch');
+    const closeMap = document.getElementById('closeMap');
 
     function render() {
       const node = currentNode();
@@ -222,7 +262,7 @@
       const solutions = Array.from(state.solutions.entries()).sort((a,b) => b[1]-a[1]);
       solutionsEl.innerHTML = '';
       if (!solutions.length) { const empty = document.createElement('div'); empty.className = 'footnote'; empty.textContent = 'Nessuna proposta ancora: inizia a cliccare le risposte.'; solutionsEl.appendChild(empty); }
-      else { solutions.forEach(([name, weight]) => { const row = document.createElement('div'); row.className='solution'; row.innerHTML = `<b>${name}</b><div class="footnote">pertinenza ×${weight}</div>`; solutionsEl.appendChild(row); }); }
+      else { solutions.forEach(([name, weight]) => { const row = document.createElement('div'); row.className='solution'; row.innerHTML = `<b>${name}</b><div class=\"footnote\">pertinenza ×${weight}</div>`; solutionsEl.appendChild(row); }); }
     }
 
     function chooseOption(opt, node) {
@@ -251,25 +291,124 @@
     });
     restartBtn.addEventListener('click', () => { state.stack=['start']; state.answers=[]; state.pathLabels=[]; state.solutions=new Map(); closeReport(); render(); });
 
+    // Termine intervista manuale
+    endNowBtn.addEventListener('click', () => { openReport(true); });
+
     // === REPORT ===
-    reportBtn.addEventListener('click', openReport);
-    function buildReportText(){
-      const dt = new Date().toLocaleString('it-IT');
-      const lines = ['📝 Report azienda – Discovery Cerved','Data: '+dt,'','RISPOSTE'];
-      state.answers.forEach((r,i)=>lines.push(`${i+1}. ${r.q}
-   → ${r.a}`));
-      if (state.pathLabels.length){ lines.push('','TAG / NOTE'); state.pathLabels.forEach(t=>lines.push('• '+t)); }
+    reportBtn.addEventListener('click', () => openReport());
+
+    function buildProductSection(){
       const solutions = Array.from(state.solutions.entries()).sort((a,b)=>b[1]-a[1]);
-      if (solutions.length){ lines.push('','SOLUZIONI CONSIGLIATE (per pertinenza)'); solutions.forEach(([n,w])=>lines.push(`• ${n} (×${w})`)); }
-      lines.push('','Prossimi passi:', '• Validare priorità con il cliente','• Pianificare demo/prova dove applicabile','• Definire integrazioni (API/CRM)');
+      if (!solutions.length) return 'Nessun prodotto consigliato: l\'intervista è troppo breve.
+';
+      const lines = [];
+      solutions.forEach(([name, weight]) => {
+        const info = SOLUTION_INFO[name] || {};
+        // motivazione semplice in base ai tag scelti
+        const whyFromPath = inferReason(name);
+        lines.push(`• ${name} (pertinenza ×${weight})`);
+        if (info.desc) lines.push(`  – Cos'è: ${info.desc}`);
+        if (info.why || whyFromPath) lines.push(`  – Perché ora: ${whyFromPath || info.why}`);
+      });
       return lines.join('
 ');
     }
-    function openReport(){ reportText.textContent = buildReportText(); reportModal.classList.add('open'); reportModal.setAttribute('aria-hidden','false'); }
+
+    function inferReason(name){
+      const tags = state.pathLabels.join(' | ');
+      if (/Mercato: Estero/.test(tags) && /Atoka|internazionali|estero/i.test(name)) return 'clientela estera → serve copertura e segmentazione fuori Italia.';
+      if (/Mercato: Italia/.test(tags) && /Powerbiz/.test(name)) return 'focalizzazione sul mercato domestico → cruscotti Italia.';
+      if (/Acquisizione:/.test(tags) && /Atoka|Marketing Intelligence|segmentazione/i.test(name)) return 'priorità su nuova pipeline e targettizzazione.';
+      if (/CRM: No|CRM: Sì \(non integrato\)/.test(tags) && /API|enrichment/i.test(name)) return 'integrazione/arricchimento dati nel CRM per operatività.';
+      if (/Valutazione: Esperienza/.test(tags) && /Report|Pro Web/.test(name)) return 'standardizzare la qualificazione oltre all\'esperienza.';
+      if (/Credito: Non monitorato/.test(tags) && /CCS|Credit Risk|Monitoring/i.test(name)) return 'mancato monitoraggio del rischio → introdurre score e allarmi.';
+      if (/Competitor:/.test(tags) && /Market|Benchmark|Dashboard competitive/.test(name)) return 'necessità di confronto strutturato con il mercato.';
+      if (/Attrito: Documenti/.test(tags) && /DAS/.test(name)) return 'colli di bottiglia su documenti → automazione acquisizione.';
+      if (/Attrito: Qualifica/.test(tags) && /Report|Pro Web|Monitoring/.test(name)) return 'qualifica debole → documenti e sorveglianza costante.';
+      if (/Attrito: Credito/.test(tags) && /CCS|Monitoring|Credit Risk/.test(name)) return 'problemi di incasso → score, policy e alert.';
+      return '';
+    }
+
+    function buildReportText(manual=false){
+      const dt = new Date().toLocaleString('it-IT');
+      const lines = [];
+      lines.push('🧭 Responso intervista – Discovery Cerved');
+      lines.push('Data: ' + dt + (manual ? ' (terminata manualmente)' : ''));
+      lines.push('');
+      lines.push('📌 Prodotti consigliati (con spiegazione)');
+      lines.push(buildProductSection());
+      lines.push('');
+      lines.push('— — —');
+      lines.push('');
+      lines.push('🧩 Risposte raccolte');
+      state.answers.forEach((r,i)=>lines.push(`${i+1}. ${r.q}
+   → ${r.a}`));
+      if (state.pathLabels.length){ lines.push(''); lines.push('🏷️ Tag / Note'); state.pathLabels.forEach(t=>lines.push('• '+t)); }
+      return lines.join('
+');
+    }
+
+    function openReport(manual=false){ reportText.textContent = buildReportText(manual); reportModal.classList.add('open'); reportModal.setAttribute('aria-hidden','false'); }
     function closeReport(){ reportModal.classList.remove('open'); reportModal.setAttribute('aria-hidden','true'); }
     copyReport.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(reportText.textContent); copyReport.textContent='Copiato!'; setTimeout(()=>copyReport.textContent='Copia',1200);}catch(e){} });
-    downloadReport.addEventListener('click', ()=>{ const blob=new Blob([reportText.textContent],{type:'text/plain;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Report_Discovery_Cerved.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),500); });
+    downloadReport.addEventListener('click', () => {
+      const blob=new Blob([reportText.textContent],{type:'text/plain;charset=utf-8'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a'); a.href=url; a.download='Responso_Discovery_Cerved.txt';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),500);
+    });
+
+    // PDF via finestra di stampa con layout dedicato
+    downloadPDF.addEventListener('click', () => {
+      const win = window.open('', '_blank');
+      const css = `
+        <style>
+          body{font:14px/1.4 system-ui, Segoe UI, Roboto, Arial; color:#111; padding:24px}
+          h1{font-size:20px;margin:0 0 12px}
+          .meta{color:#444;margin-bottom:16px}
+          pre{white-space:pre-wrap;background:#fafafa;border:1px solid #eee;padding:12px;border-radius:8px}
+          @page{margin:16mm}
+        </style>`;
+      const dt = new Date().toLocaleString('it-IT');
+      win.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Responso Discovery Cerved</title>'+css+'</head><body>');
+      win.document.write('<h1>Responso Discovery Cerved</h1>');
+      win.document.write('<div class="meta">Generato: '+dt+'</div>');
+      win.document.write('<pre>'+reportText.textContent.replace(/[&<>]/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[s]))+'</pre>');
+      win.document.write('</body></html>');
+      win.document.close();
+      win.focus();
+      win.print();
+    }); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Responso_Discovery_Cerved.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),500); });
     closeReport.addEventListener('click', closeReport);
+
+    // === MAPPA DOMANDE ===
+    mapBtn.addEventListener('click', openMap);
+    closeMap.addEventListener('click', () => mapModal.classList.remove('open'));
+    mapSearch.addEventListener('input', filterMap);
+
+    function openMap(){
+      buildMapList();
+      mapModal.classList.add('open');
+    }
+    function buildMapList(){
+      const values = Object.values(NODES||{});
+      mapList.innerHTML='';
+      values.forEach(node => {
+        const box = document.createElement('div');
+        box.className = 'solution';
+        const count = (node.options||[]).length;
+        box.innerHTML = `<b>${node.id}</b> — ${node.text || '(senza testo)'}<div class="footnote">opzioni: ${count}</div>`;
+        box.style.cursor = 'pointer';
+        box.addEventListener('click', ()=>{ state.stack=[node.id]; state.answers=[]; state.pathLabels=[]; state.solutions=new Map(); render(); mapModal.classList.remove('open'); });
+        mapList.appendChild(box);
+      });
+    }
+    function filterMap(){
+      const q = (mapSearch.value||'').toLowerCase();
+      const items = Array.from(mapList.children);
+      items.forEach(el => { const t = el.textContent.toLowerCase(); el.style.display = t.includes(q) ? '' : 'none'; });
+    }
 
     // === SCHEMA TOOLS ===
     document.getElementById('reloadSchema').addEventListener('click', ()=> loadSchemaFromUrl('albero.json'));
@@ -292,5 +431,22 @@
     // Avvio: prova a caricare albero.json
     loadSchemaFromUrl('albero.json');
   </script>
-</body>
+  <!-- Modal Mappa Domande -->
+  <div class="modal" id="mapModal" aria-hidden="true">
+    <div class="box">
+      <header>
+        <h2>Tutte le domande disponibili</h2>
+      </header>
+      <div class="content">
+        <input id="mapSearch" placeholder="Cerca testo o id…" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);margin-bottom:10px" />
+        <div id="mapList" style="display:grid;gap:8px;max-height:50vh;overflow:auto"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="closeMap">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  </body>
 </html>
+
