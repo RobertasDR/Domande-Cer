@@ -6,109 +6,41 @@
   <title>Albero decisionale Cerved – Discovery chiamata</title>
   <style>
     :root {
-      --bg: #0b0d10;
-      --panel: #12161b;
-      --muted: #9aa4af;
-      --text: #e9eef5;
-      --accent: #5dd0ff;
-      --accent-2: #9bffb0;
-      --danger: #ff7a7a;
-      --card: #0f1318;
-      --chip: #1a2027;
-      --border: #222934;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --bg: #0b0d10; --panel: #12161b; --muted: #9aa4af; --text: #e9eef5; --accent: #5dd0ff; --accent-2: #9bffb0; --danger: #ff7a7a; --card: #0f1318; --chip: #1a2027; --border: #222934; --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, var(--bg), #090b0f 60%);
-      color: var(--text);
-      font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    }
-    .wrap {
-      max-width: 1100px;
-      margin: 24px auto 56px;
-      padding: 0 16px;
-    }
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; margin-bottom: 16px;
-    }
-    .title {
-      display: grid; gap: 4px;
-    }
-    .title h1 { margin: 0; font-size: 22px; letter-spacing: 0.3px; }
-    .title p { margin: 0; color: var(--muted); font-size: 13px; }
-    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    button.btn {
-      background: var(--chip);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer; font-weight: 600;
-      transition: .18s ease;
-    }
-    button.btn:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: 0 8px 20px rgba(93,208,255,.12); }
-    button.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 16px;
-    }
-    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
-
-    .panel {
-      background: linear-gradient(180deg, var(--panel), #0f1419);
-      border: 1px solid var(--border);
-      border-radius: 16px; box-shadow: var(--shadow);
-    }
-
-    .question {
-      padding: 22px 22px 8px;
-      border-bottom: 1px solid var(--border);
-    }
-    .question small { color: var(--muted); }
-
-    .qtext { font-size: 18px; margin: 4px 0 0; }
-
-    .options { padding: 14px 18px 20px; display: grid; gap: 10px; }
-    .opt {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 14px;
-      padding: 14px 16px; cursor: pointer;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; transition: .18s ease;
-    }
-    .opt:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(93,208,255,.1); transform: translateY(-1px); }
-    .opt .hint { color: var(--muted); font-size: 12px; }
-
-    .sidebar { padding: 16px; display: grid; gap: 16px; }
-
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
-    .card h3 { margin: 0 0 8px; font-size: 14px; color: #dfe8f3; letter-spacing: .2px; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
-      background: var(--chip);
-      border: 1px solid var(--border);
-      padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--text);
-    }
-
-    .breadcrumbs { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted); }
-    .crumb { display: inline-flex; gap: 6px; align-items: center; }
-    .crumb a { color: var(--accent); text-decoration: none; font-size: 13px; }
-
-    .footnote { color: var(--muted); font-size: 12px; margin-top: 4px; }
-
-    .solutions { display: grid; gap: 8px; }
-    .solution { border: 1px dashed var(--border); padding: 10px 12px; border-radius: 12px; }
-    .solution b { color: var(--accent-2); }
-
-    .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 12px; }
+    *{box-sizing:border-box} html,body{height:100%} body{margin:0;background:linear-gradient(180deg,var(--bg),#090b0f 60%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    .wrap{max-width:1100px;margin:24px auto 56px;padding:0 16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .title{display:grid;gap:4px} .title h1{margin:0;font-size:22px;letter-spacing:.3px} .title p{margin:0;color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    button.btn{background:var(--chip);color:var(--text);border:1px solid var(--border);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;transition:.18s ease}
+    button.btn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 8px 20px rgba(93,208,255,.12)} button.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+    .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px} @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .panel{background:linear-gradient(180deg,var(--panel),#0f1419);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+    .question{padding:22px 22px 8px;border-bottom:1px solid var(--border)} .question small{color:var(--muted)} .qtext{font-size:18px;margin:4px 0 0}
+    .options{padding:14px 18px 20px;display:grid;gap:10px}
+    .opt{border:1px solid var(--border);background:var(--card);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:.18s ease}
+    .opt:hover{border-color:var(--accent);box-shadow:0 8px 20px rgba(93,208,255,.1);transform:translateY(-1px)} .opt .hint{color:var(--muted);font-size:12px}
+    .sidebar{padding:16px;display:grid;gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px} .card h3{margin:0 0 8px;font-size:14px;color:#dfe8f3;letter-spacing:.2px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px} .chip{background:var(--chip);border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--text)}
+    .breadcrumbs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--border);color:var(--muted)} .crumb{display:inline-flex;gap:6px;align-items:center} .crumb a{color:var(--accent);text-decoration:none;font-size:13px}
+    .footnote{color:var(--muted);font-size:12px;margin-top:4px}
+    .solutions{display:grid;gap:8px} .solution{border:1px dashed var(--border);padding:10px 12px;border-radius:12px} .solution b{color:var(--accent-2)}
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin-top:12px}
+    .status{padding:10px 16px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border)} .status b{color:var(--accent)}
+    /* Modal Report */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:20px}
+    .modal.open{display:flex}
+    .modal .box{max-width:820px;width:100%;background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+    .modal header{padding:14px 16px;border-bottom:1px solid var(--border)} .modal header h2{font-size:18px;margin:0}
+    .modal .content{padding:16px}
+    .report{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;max-height:45vh;overflow:auto}
+    .modal .actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px 16px}
+    /* Schema tools */
+    .schema-tools{display:flex;gap:8px;flex-wrap:wrap}
+    input[type=file]{display:none}
+    label.file{background:var(--chip);border:1px solid var(--border);padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
   </style>
 </head>
 <body>
@@ -121,12 +53,20 @@
       <div class="controls">
         <button class="btn" id="backBtn" disabled>◀︎ Indietro</button>
         <button class="btn" id="restartBtn">⟲ Ricomincia</button>
+        <button class="btn" id="reportBtn" disabled>📝 Genera report</button>
+        <div class="schema-tools">
+          <button class="btn" id="reloadSchema">↻ Ricarica albero</button>
+          <label class="file" for="uploadSchema">⤴︎ Carica JSON</label>
+          <input type="file" id="uploadSchema" accept="application/json" />
+          <button class="btn" id="downloadSchema">⬇︎ Scarica schema</button>
+        </div>
       </div>
     </header>
 
     <div class="grid">
       <section class="panel" id="qaPanel">
         <div class="breadcrumbs" id="breadcrumbs"></div>
+        <div class="status" id="status">Schema: <b>caricamento…</b></div>
         <div class="question">
           <small>Domanda corrente</small>
           <div class="qtext" id="qtext"></div>
@@ -149,134 +89,73 @@
     </div>
   </div>
 
-  <script>
-    // === MODELLO DELL'ALBERO ===
-    // Ogni nodo ha: id, text (domanda), options: [{label, next, addSolutions:[], addTags:[] }]
-    // I nodi terminali hanno addSolutions più ricche per chiudere la raccomandazione.
+  <!-- Modal Report -->
+  <div class="modal" id="reportModal" aria-hidden="true">
+    <div class="box">
+      <header>
+        <h2>Report sintetico azienda</h2>
+      </header>
+      <div class="content">
+        <div class="report" id="reportText"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="copyReport">Copia</button>
+        <button class="btn" id="downloadReport">Scarica .txt</button>
+        <button class="btn" id="closeReport">Chiudi</button>
+      </div>
+    </div>
+  </div>
 
-    const NODES = {
-      start: {
-        id: 'start',
-        text: 'Qual è la tipologia prevalente dei vostri clienti?',
-        options: [
-          { label: 'Grandi imprese', next: 'geo', addSolutions: ['Report Cerved', 'Pro Web', 'Rating & Affidabilità'], addTags: ['Tipologia: Grandi'] },
-          { label: 'PMI / Micro', next: 'geo', addSolutions: ['Credit Check (CCS)', 'Report Cerved'], addTags: ['Tipologia: PMI/Micro'] },
-          { label: 'Misto', next: 'geo', addSolutions: ['Report Cerved'], addTags: ['Tipologia: Misto'] },
-        ]
-      },
-      geo: {
-        id: 'geo',
-        text: 'La vostra clientela è prevalentemente…',
-        options: [
-          { label: 'Italia', next: 'acq', addSolutions: ['Powerbiz', 'Marketing Intelligence'], addTags: ['Mercato: Italia'] },
-          { label: 'Estero (≥ 90%)', next: 'geo_estero', addSolutions: [], addTags: ['Mercato: Estero ≥90%'] },
-          { label: 'Misto Italia/Estero', next: 'acq', addSolutions: ['Atoka con add-on estero'], addTags: ['Mercato: Misto'] },
-        ]
-      },
-      geo_estero: {
-        id: 'geo_estero',
-        text: 'Su quali aree estere operate di più?',
-        options: [
-          { label: 'Europa', next: 'acq', addSolutions: ['Atoka – add-on estero (EU)'], addTags: ['Estero: Europa'] },
-          { label: 'Extra UE', next: 'acq', addSolutions: ['Visure/Report internazionali'], addTags: ['Estero: Extra UE'] },
-        ]
-      },
-      acq: {
-        id: 'acq',
-        text: 'Come individuate nuovi clienti o mercati?',
-        options: [
-          { label: 'Passaparola / rete commerciale', next: 'crm', addSolutions: ['Atoka (prospezione)', 'Marketing Intelligence'], addTags: ['Acquisizione: Passaparola'] },
-          { label: 'Strumenti e dati strutturati', next: 'crm', addSolutions: ['CRM enrichment (API Cerved)'], addTags: ['Acquisizione: Dati strutturati'] },
-        ]
-      },
-      crm: {
-        id: 'crm',
-        text: 'Avete un CRM o strumenti digitali per gestire i contatti?',
-        options: [
-          { label: 'Sì, ma non integrato con dati esterni', next: 'valutazione', addSolutions: ['API Cerved', 'Atoka integrato'], addTags: ['CRM: Sì (non integrato)'] },
-          { label: 'Sì, già integrato', next: 'valutazione', addSolutions: [], addTags: ['CRM: Sì (integrato)'] },
-          { label: 'No', next: 'valutazione', addSolutions: ['Atoka (prima implementazione)'], addTags: ['CRM: No'] },
-        ]
-      },
-      valutazione: {
-        id: 'valutazione',
-        text: 'Quando valutate clienti/fornitori, su cosa vi basate?',
-        options: [
-          { label: 'Esperienza / impressioni', next: 'credito', addSolutions: ['Report Cerved', 'Pro Web'], addTags: ['Valutazione: Esperienza'] },
-          { label: 'Controlli periodici e documentali', next: 'credito', addSolutions: ['Monitoring & Alert', 'DAS (documenti)'], addTags: ['Valutazione: Controlli'] },
-        ]
-      },
-      credito: {
-        id: 'credito',
-        text: 'Come gestite tempi di incasso e rischio credito?',
-        options: [
-          { label: 'Non monitoriamo in modo sistematico', next: 'competitor', addSolutions: ['Cerved Credit Score (CCS)', 'Credit Risk Management'], addTags: ['Credito: Non monitorato'] },
-          { label: 'Policy e score interni', next: 'competitor', addSolutions: ['Monitoring & Alert'], addTags: ['Credito: Policy interne'] },
-        ]
-      },
-      competitor: {
-        id: 'competitor',
-        text: 'Analisi dei competitor: come vi confrontate con il mercato?',
-        options: [
-          { label: 'Non abbiamo un benchmark strutturato', next: 'bandi', addSolutions: ['Market/Competitive Intelligence', 'Benchmark settoriali'], addTags: ['Competitor: Assente'] },
-          { label: 'Benchmark su alcuni indicatori', next: 'bandi', addSolutions: ['Analisi comparativa avanzata', 'Atoka per mappatura competitor'], addTags: ['Competitor: Parziale'] },
-        ]
-      },
-      bandi: {
-        id: 'bandi',
-        text: 'Bandi e gare pubbliche: sono rilevanti per la vostra crescita?',
-        options: [
-          { label: 'Sì, frequenti', next: 'attriti', addSolutions: ['Cerca il Bando'], addTags: ['Bandi: Sì'] },
-          { label: 'Occasionali / No', next: 'attriti', addSolutions: [], addTags: ['Bandi: No/Occ.'] },
-        ]
-      },
-      attriti: {
-        id: 'attriti',
-        text: 'Guardando all’ultimo anno, dove incontrate più attrito?',
-        options: [
-          { label: 'Acquisizione clienti', next: 'final_acq', addSolutions: ['Atoka', 'Marketing Intelligence'], addTags: ['Attrito: Acquisizione'] },
-          { label: 'Qualifica clienti/fornitori', next: 'final_qual', addSolutions: ['Reportistica', 'Pro Web'], addTags: ['Attrito: Qualifica'] },
-          { label: 'Incassi / rischio credito', next: 'final_credit', addSolutions: ['CCS', 'Monitoring & Alert'], addTags: ['Attrito: Credito'] },
-          { label: 'Documenti / burocrazia', next: 'final_doc', addSolutions: ['DAS (Document Acquisition System)'], addTags: ['Attrito: Documenti'] },
-        ]
-      },
-      final_acq: {
-        id: 'final_acq',
-        text: 'Raccomandazione: potenziamo lead gen e segmentazione.',
-        options: [
-          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Atoka (prospezione + add-on estero se serve)', 'Marketing Intelligence', 'CRM enrichment (API Cerved)'], addTags: ['Output: Acquisizione'] }
-        ]
-      },
-      final_qual: {
-        id: 'final_qual',
-        text: 'Raccomandazione: qualificazione strutturata di clienti e fornitori.',
-        options: [
-          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Report Cerved', 'Pro Web', 'Monitoring & Alert'], addTags: ['Output: Qualifica'] }
-        ]
-      },
-      final_credit: {
-        id: 'final_credit',
-        text: 'Raccomandazione: controllo rischio e incassi.',
-        options: [
-          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['Cerved Credit Score (CCS)', 'Credit Risk Management', 'Monitoring & Alert'], addTags: ['Output: Credito'] }
-        ]
-      },
-      final_doc: {
-        id: 'final_doc',
-        text: 'Raccomandazione: snellire l’acquisizione documentale.',
-        options: [
-          { label: 'Vedi soluzioni consigliate e termina', next: null, addSolutions: ['DAS (Document Acquisition System)'], addTags: ['Output: Documenti'] }
-        ]
+  <script>
+    // === CARICAMENTO SCHEMA DINAMICO ===
+    // L'albero viene letto da 'albero.json' (stessa cartella). È possibile anche caricare un JSON locale o scaricare lo schema corrente.
+
+    let NODES = {};               // popolerà lo schema
+    let RAW_SCHEMA_TEXT = '';     // testo originale per download
+
+    const statusEl = document.getElementById('status');
+
+    async function loadSchemaFromUrl(url = 'albero.json') {
+      setStatus('caricamento…');
+      try {
+        const res = await fetch(url + '?v=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        NODES = data;
+        RAW_SCHEMA_TEXT = JSON.stringify(data, null, 2);
+        setStatus('caricato da ' + url);
+        initOrRender();
+      } catch (e) {
+        setStatus('errore: non trovo "' + url + '". Carica un JSON o usa lo schema di esempio.');
+        // fallback: mini schema per permettere uso immediato
+        NODES = demoSchema();
+        RAW_SCHEMA_TEXT = JSON.stringify(NODES, null, 2);
+        initOrRender();
       }
-    };
+    }
+
+    function setStatus(text){ statusEl.innerHTML = 'Schema: <b>' + text + '</b>'; }
+
+    function demoSchema(){
+      return {
+        "start": {"id":"start","text":"Qual è la tipologia prevalente dei vostri clienti?","options":[
+          {"label":"Grandi imprese","next":"geo","addSolutions":["Report Cerved","Pro Web"],"addTags":["Tipologia: Grandi"]},
+          {"label":"PMI / Micro","next":"geo","addSolutions":["CCS"],"addTags":["Tipologia: PMI/Micro"]},
+          {"label":"Altro","next":"geo","promptNote":true}
+        ]},
+        "geo": {"id":"geo","text":"La vostra clientela è prevalentemente…","options":[
+          {"label":"Italia","next":"acq","addSolutions":["Powerbiz","Marketing Intelligence"],"addTags":["Mercato: Italia"]},
+          {"label":"Estero","next":"acq","addSolutions":["Atoka estero"],"addTags":["Mercato: Estero"]}
+        ]},
+        "acq": {"id":"acq","text":"Come individuate nuovi clienti o mercati?","options":[
+          {"label":"Passaparola","next":null,"addSolutions":["Atoka","Marketing Intelligence"]},
+          {"label":"Dati strutturati","next":null,"addSolutions":["API Cerved"]}
+        ]}
+      };
+    }
 
     // === STATO ===
-    const state = {
-      stack: ['start'], // history of node ids
-      pathLabels: [],   // chosen labels
-      solutions: new Map() // solution -> weight
-    };
-
+    const state = { stack: ['start'], answers: [], pathLabels: [], solutions: new Map() };
     function currentNode() { return NODES[state.stack[state.stack.length - 1]]; }
 
     // === RENDER ===
@@ -284,131 +163,134 @@
     const optionsEl = document.getElementById('options');
     const backBtn = document.getElementById('backBtn');
     const restartBtn = document.getElementById('restartBtn');
+    const reportBtn = document.getElementById('reportBtn');
     const solutionsEl = document.getElementById('solutions');
     const pathChipsEl = document.getElementById('pathChips');
     const breadcrumbsEl = document.getElementById('breadcrumbs');
 
+    const reportModal = document.getElementById('reportModal');
+    const reportText = document.getElementById('reportText');
+    const copyReport = document.getElementById('copyReport');
+    const downloadReport = document.getElementById('downloadReport');
+    const closeReport = document.getElementById('closeReport');
+
     function render() {
       const node = currentNode();
-      // Header & question
-      qtextEl.textContent = node.text;
+      if (!node) { qtextEl.textContent = 'Nodo mancante. Controlla che l\'id esista nel JSON.'; optionsEl.innerHTML=''; return; }
+      qtextEl.textContent = node.text || '(senza testo)';
       optionsEl.innerHTML = '';
 
-      node.options.forEach((opt, idx) => {
+      (node.options||[]).forEach((opt) => {
         const div = document.createElement('div');
         div.className = 'opt';
         const left = document.createElement('div');
-        left.innerHTML = `<div>${opt.label}</div>`;
+        left.innerHTML = `<div>${opt.label || '(opzione)'}</div>`;
         const right = document.createElement('div');
         right.className = 'hint';
         right.textContent = opt.next ? 'continua →' : 'conclusione';
         div.append(left, right);
-        div.addEventListener('click', () => chooseOption(opt));
+        div.addEventListener('click', () => chooseOption(opt, node));
         optionsEl.appendChild(div);
       });
 
-      // Controls
       backBtn.disabled = state.stack.length <= 1;
+      reportBtn.disabled = state.answers.length === 0;
 
       // Breadcrumbs
       breadcrumbsEl.innerHTML = '';
       state.stack.forEach((nodeId, i) => {
-        const span = document.createElement('span');
-        span.className = 'crumb';
+        const span = document.createElement('span'); span.className = 'crumb';
         if (i < state.stack.length - 1) {
           const link = document.createElement('a');
-          link.textContent = NODES[nodeId].text.length > 36 ? NODES[nodeId].text.slice(0,36) + '…' : NODES[nodeId].text;
+          const label = (NODES[nodeId]?.text || '').slice(0,36) || nodeId;
+          link.textContent = label + (label.length>=36 ? '…' : '');
           link.href = '#';
           link.addEventListener('click', (e) => { e.preventDefault(); jumpTo(i); });
           span.appendChild(link);
           const sep = document.createElement('span'); sep.textContent = '›'; sep.style.opacity = .6; span.appendChild(sep);
         } else {
-          const cur = document.createElement('span'); cur.textContent = NODES[nodeId].text;
-          span.appendChild(cur);
+          const cur = document.createElement('span'); cur.textContent = NODES[nodeId]?.text || nodeId; span.appendChild(cur);
         }
         breadcrumbsEl.appendChild(span);
       });
 
       // Path chips
       pathChipsEl.innerHTML = '';
-      state.pathLabels.forEach((lbl) => {
-        const c = document.createElement('span');
-        c.className = 'chip'; c.textContent = lbl;
-        pathChipsEl.appendChild(c);
-      });
+      state.pathLabels.forEach((lbl) => { const c = document.createElement('span'); c.className='chip'; c.textContent = lbl; pathChipsEl.appendChild(c); });
 
       // Solutions – sorted by weight desc
       const solutions = Array.from(state.solutions.entries()).sort((a,b) => b[1]-a[1]);
       solutionsEl.innerHTML = '';
-      if (!solutions.length) {
-        const empty = document.createElement('div');
-        empty.className = 'footnote';
-        empty.textContent = 'Nessuna proposta ancora: inizia a cliccare le risposte.';
-        solutionsEl.appendChild(empty);
-      } else {
-        solutions.forEach(([name, weight]) => {
-          const row = document.createElement('div');
-          row.className = 'solution';
-          row.innerHTML = `<b>${name}</b><div class="footnote">pertinenza ×${weight}</div>`;
-          solutionsEl.appendChild(row);
-        });
-      }
+      if (!solutions.length) { const empty = document.createElement('div'); empty.className = 'footnote'; empty.textContent = 'Nessuna proposta ancora: inizia a cliccare le risposte.'; solutionsEl.appendChild(empty); }
+      else { solutions.forEach(([name, weight]) => { const row = document.createElement('div'); row.className='solution'; row.innerHTML = `<b>${name}</b><div class="footnote">pertinenza ×${weight}</div>`; solutionsEl.appendChild(row); }); }
     }
 
-    function chooseOption(opt) {
-      // record selections
-      if (opt.addTags) opt.addTags.forEach(t => state.pathLabels.push(t));
-      if (opt.addSolutions) opt.addSolutions.forEach(s => state.solutions.set(s, (state.solutions.get(s) || 0) + 1));
-
-      if (opt.next) {
-        state.stack.push(opt.next);
-        render();
-      } else {
-        // Terminal node: just refresh solutions (already updated) and lock current node
-        render();
+    function chooseOption(opt, node) {
+      let note = '';
+      if (opt.promptNote) {
+        note = window.prompt('Specifica brevemente (verrà messo nel report):', '') || '';
+        if (note.trim()) state.pathLabels.push('Nota: ' + note.trim());
       }
+      state.answers.push({ q: node.text || node.id, a: note ? `${opt.label} – ${note}` : (opt.label||'') });
+      (opt.addTags||[]).forEach(t => state.pathLabels.push(t));
+      (opt.addSolutions||[]).forEach(s => state.solutions.set(s, (state.solutions.get(s) || 0) + 1));
+
+      if (opt.next) { state.stack.push(opt.next); render(); }
+      else { openReport(); }
     }
 
     function jumpTo(index) {
-      // trim to index
       state.stack = state.stack.slice(0, index + 1);
-      // also trim path labels heuristically (not perfect reverse map, but acceptable UX)
-      // Simpler approach: recompute from scratch following the stack choices.
-      recomputeState();
+      state.answers = state.answers.slice(0, index);
+      state.pathLabels = []; state.solutions = new Map();
       render();
-    }
-
-    function recomputeState() {
-      // Recompute selections by replaying from start using saved stack transitions
-      const oldStack = [...state.stack];
-      const labels = [];
-      const sol = new Map();
-
-      // We cannot infer which option was picked at each step from node ids alone.
-      // So we reset to only the current node without history (best-effort UX).
-      // In practice, jumpTo is used to go back one or two steps, so user can re-click.
-      state.stack = [oldStack[oldStack.length-1]];
-      state.pathLabels = labels;
-      state.solutions = sol;
     }
 
     backBtn.addEventListener('click', () => {
-      if (state.stack.length > 1) {
-        state.stack.pop();
-        recomputeState();
-        render();
-      }
+      if (state.stack.length > 1) { state.stack.pop(); state.answers.pop(); state.pathLabels=[]; state.solutions=new Map(); render(); }
+    });
+    restartBtn.addEventListener('click', () => { state.stack=['start']; state.answers=[]; state.pathLabels=[]; state.solutions=new Map(); closeReport(); render(); });
+
+    // === REPORT ===
+    reportBtn.addEventListener('click', openReport);
+    function buildReportText(){
+      const dt = new Date().toLocaleString('it-IT');
+      const lines = ['📝 Report azienda – Discovery Cerved','Data: '+dt,'','RISPOSTE'];
+      state.answers.forEach((r,i)=>lines.push(`${i+1}. ${r.q}
+   → ${r.a}`));
+      if (state.pathLabels.length){ lines.push('','TAG / NOTE'); state.pathLabels.forEach(t=>lines.push('• '+t)); }
+      const solutions = Array.from(state.solutions.entries()).sort((a,b)=>b[1]-a[1]);
+      if (solutions.length){ lines.push('','SOLUZIONI CONSIGLIATE (per pertinenza)'); solutions.forEach(([n,w])=>lines.push(`• ${n} (×${w})`)); }
+      lines.push('','Prossimi passi:', '• Validare priorità con il cliente','• Pianificare demo/prova dove applicabile','• Definire integrazioni (API/CRM)');
+      return lines.join('
+');
+    }
+    function openReport(){ reportText.textContent = buildReportText(); reportModal.classList.add('open'); reportModal.setAttribute('aria-hidden','false'); }
+    function closeReport(){ reportModal.classList.remove('open'); reportModal.setAttribute('aria-hidden','true'); }
+    copyReport.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(reportText.textContent); copyReport.textContent='Copiato!'; setTimeout(()=>copyReport.textContent='Copia',1200);}catch(e){} });
+    downloadReport.addEventListener('click', ()=>{ const blob=new Blob([reportText.textContent],{type:'text/plain;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='Report_Discovery_Cerved.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),500); });
+    closeReport.addEventListener('click', closeReport);
+
+    // === SCHEMA TOOLS ===
+    document.getElementById('reloadSchema').addEventListener('click', ()=> loadSchemaFromUrl('albero.json'));
+    document.getElementById('downloadSchema').addEventListener('click', ()=>{
+      const blob = new Blob([RAW_SCHEMA_TEXT || JSON.stringify(NODES,null,2)], {type:'application/json;charset=utf-8'});
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='albero.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),500);
+    });
+    document.getElementById('uploadSchema').addEventListener('change', (e)=>{
+      const file = e.target.files?.[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { const data = JSON.parse(reader.result); NODES = data; RAW_SCHEMA_TEXT = JSON.stringify(data,null,2); setStatus('caricato da file locale'); initOrRender(true); }
+        catch(err){ setStatus('errore parsing JSON: ' + err.message); }
+      };
+      reader.readAsText(file);
     });
 
-    restartBtn.addEventListener('click', () => {
-      state.stack = ['start'];
-      state.pathLabels = [];
-      state.solutions = new Map();
-      render();
-    });
+    function initOrRender(reset=false){ if(reset){ state.stack=['start']; state.answers=[]; state.pathLabels=[]; state.solutions=new Map(); } render(); }
 
-    // Init
-    render();
+    // Avvio: prova a caricare albero.json
+    loadSchemaFromUrl('albero.json');
   </script>
 </body>
 </html>
