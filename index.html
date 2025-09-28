@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Albero decisionale Cerved</title>
+  <title>Albero decisionale Cerved – Discovery chiamata</title>
   <style>
     :root {
       --bg: #0b0d10; --panel: #12161b; --muted: #9aa4af; --text: #e9eef5; --accent: #5dd0ff; --accent-2: #9bffb0; --danger: #ff7a7a; --card: #0f1318; --chip: #1a2027; --border: #222934; --shadow: 0 10px 30px rgba(0,0,0,.35);
@@ -120,14 +120,35 @@
     async function loadSchemaFromUrl(url = 'albero.json') {
       setStatus('caricamento…');
       try {
-        const res = await fetch(url + '?v=' + Date.now());
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        NODES = data;
-        RAW_SCHEMA_TEXT = JSON.stringify(data, null, 2);
-        setStatus('caricato da ' + url);
-        initOrRender(true);
+        const res = await fetch(url + (url.includes('?') ? '' : ('?v=' + Date.now())));
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' su ' + url);
+        const text = await res.text();
+        // debug: mostra qualche carattere iniziale se fallisce il parse
+        try {
+          const data = JSON.parse(text);
+          NODES = data;
+          RAW_SCHEMA_TEXT = JSON.stringify(data, null, 2);
+          setStatus('caricato da ' + url);
+          initOrRender(true);
+        } catch (parseErr) {
+          console.error('JSON parse error:', parseErr, text.slice(0, 200));
+          throw new Error('Formato JSON non valido in ' + url + ' → ' + parseErr.message);
+        }
       } catch (e) {
+        console.error('Schema load error:', e);
+        setStatus('errore: ' + (e?.message || 'impossibile caricare lo schema')); 
+        // fallback demo minimal
+        NODES = demoSchema();
+        RAW_SCHEMA_TEXT = JSON.stringify(NODES, null, 2);
+        initOrRender(true);
+      }
+    } catch (e) { lastErr = e; }
+      }
+      setStatus('errore: impossibile caricare lo schema (' + (lastErr?.message||'') + '). Carica un JSON o usa lo schema demo.');
+      NODES = demoSchema();
+      RAW_SCHEMA_TEXT = JSON.stringify(NODES, null, 2);
+      initOrRender(true);
+    } catch (e) {
         setStatus('errore: non trovo "' + url + '". Carica un JSON o usa lo schema di esempio.');
         NODES = demoSchema();
         RAW_SCHEMA_TEXT = JSON.stringify(NODES, null, 2);
@@ -428,8 +449,10 @@
 
     function initOrRender(reset=false){ if(reset){ state.stack=['start']; state.answers=[]; state.pathLabels=[]; state.solutions=new Map(); } render(); }
 
-    // Avvio: prova a caricare albero.json
-    loadSchemaFromUrl('albero.json');
+    // Avvio: prova a leggere ?schema=... dalla URL, altrimenti albero.json
+    const urlParams = new URLSearchParams(location.search);
+    const schemaParam = urlParams.get('schema');
+    loadSchemaFromUrl(schemaParam || 'albero.json');
   </script>
   <!-- Modal Mappa Domande -->
   <div class="modal" id="mapModal" aria-hidden="true">
@@ -449,4 +472,3 @@
 
   </body>
 </html>
-
